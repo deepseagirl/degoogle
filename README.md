@@ -16,7 +16,7 @@ optional arguments:
   -j, --exclude-junk  skip youtube, FB, quora, pinterest links (default true)
   ```
   
-*note that `time window` follows a syntax used by google's `tbs` parameter with the `qdr` option (you can read some guy explain how that works [here](https://support.google.com/websearch/thread/7860817?hl=en&msgid=7865083))*
+*note that `time window` follows a syntax used by google's `tbs` parameter with the `qdr` option (read someone explain how it works [here](https://support.google.com/websearch/thread/7860817?hl=en&msgid=7865083))*
 
 #### examples:
 1. find `.txt` files on `.edu` sites within the past `3 months`:
