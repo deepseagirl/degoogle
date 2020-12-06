@@ -39,7 +39,7 @@ class dg():
 
         normalized_query = re.sub(r' |%20', '+', self.query)
         normalized_query = re.sub(r'"|\"', '%22', normalized_query)
-        url = "https://google.com/search?start=%i&tbs=qdr:%s&q=%s" % (pg, self.time_window, normalized_query)
+        url = "https://google.com/search?start=%i&tbs=qdr:%s&q=%s&filter=0" % (pg, self.time_window, normalized_query)
         
         return requests.get(url)
 
