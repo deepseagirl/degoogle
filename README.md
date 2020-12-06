@@ -29,13 +29,13 @@ optional arguments:
 
 ```
 from degoogle import dg
-example = dg()
+degoogler = dg()
 queries = ["site:edu", "site:gov", "filetype:txt"]
 for query in queries:
 	print(query)
-	example.query = query
-	these_results = example.run()
-	for result in these_results:
+	degoogler.query = query
+	results = degoogler.run()
+	for result in results:
 		print(result)
 	print()
 ```
@@ -67,4 +67,4 @@ google will obviously always know that the search took place, and which results 
 
 there are also utility benefits here for dorking - you might find a super juicy link on page 10 with a bunch of strange parameters cached, but when you follow google's click-through you're redirected to an index page or 404 without even having a chance to copy the link from the result to research more.
 
-there are times where visually inspecting a URL is just as valuable as accessing the link. this tool ganks the good stuff, url decodes and normalizes, and returns just the scraped URL + description
+there are times where visually inspecting a URL is just as valuable as accessing the link. this tool ganks the good stuff, URL decodes and normalizes, and returns just the scraped URL + description
