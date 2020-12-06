@@ -10,7 +10,7 @@ contributions welcome
 
 ```
 optional arguments:
-  -o, --offset        page # to start from (default 0)
+  -o, --offset         page # to start from (default 0)
   -p, --pages         number of pages to grab (default 1)
   -t, --time-window   how far back in time to look (default all-time)
   -j, --exclude-junk  skip youtube, FB, quora, pinterest links (default true)
