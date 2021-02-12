@@ -2,9 +2,10 @@
 
 import argparse
 import re
-import requests
 import sys
 import urllib.parse
+
+import requests
 
 # todo ####################
 # > better junk exclusion
