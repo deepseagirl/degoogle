@@ -42,8 +42,8 @@ class dg():
 
         normalized_query = re.sub(r' |%20', '+', self.query)
         normalized_query = re.sub(r'"|\"', '%22', normalized_query)
-        url = "https://google.com/search?start=%i&tbs=qdr:%s&q=%s&filter=0" % (pg, self.time_window, normalized_query)
-        
+        url = f"https://google.com/search?start={pg}&tbs=qdr:{self.time_window}&q={normalized_query}&filter=0"
+
         return requests.get(url)
 
 
@@ -124,24 +124,29 @@ class dg():
             print(e)
             return
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+def parse_args():
+    """Parse command line interface arguments."""
+    parser = argparse.ArgumentParser(
+        description="Search and extract google results.", prog="degoogle"
+    )
     parser.add_argument('query', type=str, help='search query')
     parser.add_argument('-o', '--offset', dest='offset', type=int, default=0, help='page offset to start from')
     parser.add_argument('-p', '--pages', dest='pages', type=int, default=1, help='specify multiple pages')
     parser.add_argument('-t', '--time-window', dest='time_window', type=str, default='a', help='time window')
     parser.add_argument('-j', '--exclude-junk', dest='exclude_junk', action='store_false', help='exclude junk (yt, fb, quora)')
-    args = parser.parse_args()
+    return parser.parse_args()
 
+def main():
+    args = parse_args()
 
 ################################################################################################
 # example/demo output... erase me! VVV
 
     # usage: make a dg object to run queries through #
-    
+
     # object using command line args
     dg1 = dg(args.query, args.pages, args.offset, args.time_window, args.exclude_junk)
-    
+
     # object with query set in constructor. note all other params have default values.. you can overwrite them or leave them alone
     dg2 = dg("dg2.query test")
 
@@ -161,3 +166,6 @@ if __name__ == '__main__':
             final_string = final_string[:-2]
         print(final_string)
 ################################################################################################
+
+if __name__ == '__main__':
+    main()
