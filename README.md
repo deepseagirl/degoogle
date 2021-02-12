@@ -4,24 +4,44 @@ search Google and extract result urls directly. skip all the click-through links
 contributions welcome
 
 ---
+install with pip
+```
+git clone
+cd degoogle
+pip install .
+```
+
+---
 | command line usage | script usage |
 |-|-|
-| `python3 degoogle.py "query here"` | make a `dg` object, execute queries with `run()`|
+| `degoogle "query here"` | make a `dg` object, execute queries with `run()`|
 
 ```
+usage: degoogle [-h] [-o OFFSET] [-p PAGES] [-t TIME_WINDOW] [-j] query
+
+Search and extract google results.
+
+positional arguments:
+  query                 search query
+
 optional arguments:
-  -o, --offset         page # to start from (default 0)
-  -p, --pages         number of pages to grab (default 1)
-  -t, --time-window   how far back in time to look (default all-time)
-  -j, --exclude-junk  skip youtube, FB, quora, pinterest links (default true)
-  ```
-  
+  -h, --help            show this help message and exit
+  -o OFFSET, --offset OFFSET
+                        page offset to start from
+  -p PAGES, --pages PAGES
+                        specify multiple pages
+  -t TIME_WINDOW, --time-window TIME_WINDOW
+                        time window
+  -j, --exclude-junk    exclude junk (yt, fb, quora)
+
+```
+
 *note that `time window` follows a syntax used by google's `tbs` parameter with the `qdr` option (read someone explain how it works [here](https://support.google.com/websearch/thread/7860817?hl=en&msgid=7865083))*
 
 #### examples:
 1. find `.txt` files on `.edu` sites within the past `3 months`:
 
-`python3 degoogle.py "site:edu filetype:txt" -t m3`
+`degoogle "site:edu filetype:txt" -t m3`
 
 ![image](https://user-images.githubusercontent.com/47490856/86186391-f69e7880-bb06-11ea-8006-b21a54819beb.png)
 
