@@ -4,7 +4,10 @@ search Google and extract result urls directly. skip all the click-through links
 contributions welcome
 
 ---
-install with pip
+install with pip:
+`pip install degoogle`
+
+or
 ```
 git clone
 cd degoogle
