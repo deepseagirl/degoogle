@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import html
 import argparse
 import re
 import sys
@@ -164,7 +165,7 @@ def main():
             final_string += result['desc'] + '\n' + result['url'] + '\n\n'
         if final_string[-2:] == '\n\n':
             final_string = final_string[:-2]
-        print(final_string)
+        print(html.unescape(final_string))
 ################################################################################################
 
 if __name__ == '__main__':
