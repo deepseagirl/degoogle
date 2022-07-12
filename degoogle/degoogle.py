@@ -1,51 +1,37 @@
 #!/usr/bin/env python3
 
+from html import unescape as html_unescape
 import argparse
 import re
 import sys
 import urllib.parse
-
 import requests
 
-# todo ####################
-# > better junk exclusion
-# > infile outfile
-# > further filtering
-# > max results? made redundant by pages? more useful if/when meaningful filtering options exist beyond junk_strings
-# > also just make this not a hot mess anymore. what are exceptions?
-
 class dg():
-
     # for excluding youtube, quora, facebook results
     # disable with -j flag, or overwrite default by setting exclude_junk's action to store_true
     junk_strings = ['facebook.com/', 'pinterest.com/', 'quora.com/', 'youtube.com/', 'youtu.be/']
     junk_exclusion = r"(?:" + "|".join(junk_strings).replace(".", "\.") + ")"
-
-    def __init__(self, query="", pages=1, offset=0, time_window='a', exclude_junk=True):
+    def __init__(self, query="", pages=1, offset=0, time_window='a', exclude_junk=True, decode_descriptions=True):
         self.query = query
         self.pages = pages
         self.offset = offset
         self.time_window = time_window
         self.exclude_junk = exclude_junk
-
-    # normalize + run search.. supports page, offset, timeframe (tbs parameter)
+        self.decode_descriptions = decode_descriptions
+    # encode specific characters in search url, then run search
     def search(self, page):
         if not self.query:
             print("query needs to be set.")
             return
         pg = (self.offset*10) + (page*10) # offset factored in
-        # since the digit piece is variable, i can't use argparse.choices :(
         if (self.time_window[0] not in ('a', 'd', 'h', 'm', 'n', 'w', 'y')) or (len(self.time_window) > 1 and not self.time_window[1:].isdigit()):
-            # TODO meaningful output
             print("invalid time interval specified.")
             return()
-
-        normalized_query = re.sub(r' |%20', '+', self.query)
-        normalized_query = re.sub(r'"|\"', '%22', normalized_query)
-        url = f"https://google.com/search?start={pg}&tbs=qdr:{self.time_window}&q={normalized_query}&filter=0"
-
+        encoded_query = re.sub(r' |%20', '+', self.query)
+        encoded_query = re.sub(r'"|\"', '%22', encoded_query)
+        url = f"https://google.com/search?start={pg}&tbs=qdr:{self.time_window}&q={encoded_query}&filter=0"
         return requests.get(url)
-
 
     # validate, split, normalize entries.. return list with the extracted url+desc for each search result
     def extract_fields(self, entries):
@@ -74,8 +60,10 @@ class dg():
                     for segment in find_desc:
                         if segment and segment[0] != "<":
                             desc = segment
+                            if self.decode_descriptions == True:
+                                desc = html_unescape(desc)
 
-                # normalize result link
+                # encode specific characters in result link
                 if url and desc:
                     url = re.sub(r'%20', '+', url)
                     url = urllib.parse.unquote(url)
@@ -88,9 +76,7 @@ class dg():
                     desc = re.sub(r'&amp;', '&', desc)
                     result = {'desc': desc, 'url': url}
                     search_results.append(result)
-
         return search_results
-
 
     # for each page desired, run google search + grab result entries form page contents.. returns a list of entries
     def process_query(self):
@@ -134,6 +120,7 @@ def parse_args():
     parser.add_argument('-p', '--pages', dest='pages', type=int, default=1, help='specify multiple pages')
     parser.add_argument('-t', '--time-window', dest='time_window', type=str, default='a', help='time window')
     parser.add_argument('-j', '--exclude-junk', dest='exclude_junk', action='store_false', help='exclude junk (yt, fb, quora)')
+    parser.add_argument('-d', '--decode', dest='decode_descriptions', action='store_false', help='decode chars in result descriptions')
     return parser.parse_args()
 
 def main():
@@ -145,10 +132,10 @@ def main():
     # usage: make a dg object to run queries through #
 
     # object using command line args
-    dg1 = dg(args.query, args.pages, args.offset, args.time_window, args.exclude_junk)
+    dg1 = dg(args.query, args.pages, args.offset, args.time_window, args.exclude_junk, args.decode_descriptions)
 
     # object with query set in constructor. note all other params have default values.. you can overwrite them or leave them alone
-    dg2 = dg("dg2.query test")
+    #dg2 = dg("dg2.query test")
 
     # if you want to run a sequence of queries but leave your other params the same,
     # you can use 1 dg instance and loop over your queries, setting googler.query = this_query then calling dg.run()
