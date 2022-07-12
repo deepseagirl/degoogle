@@ -36,7 +36,7 @@ optional arguments:
   -t TIME_WINDOW, --time-window TIME_WINDOW
                         time window
   -j, --exclude-junk    exclude junk (yt, fb, quora)
-
+  -d, --decode          decode chars in result descriptions
 ```
 
 *note that `time window` follows a syntax used by google's `tbs` parameter with the `qdr` option (read someone explain how it works [here](https://support.google.com/websearch/thread/7860817?hl=en&msgid=7865083))*
